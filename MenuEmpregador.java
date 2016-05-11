@@ -1,5 +1,5 @@
 /*
- * Esta classe contém todos os menus relacionados ao empregador ( quando é efetuado o login como empregador )
+ * Esta classe contém todos os menus relacionados ao empregador ( quando é efetuado o login como empregador ) a
  */
 package simuladorsms;
 
