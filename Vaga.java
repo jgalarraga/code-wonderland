@@ -19,7 +19,7 @@ package simuladorsms;
  */
 public class Vaga {
     /* Declaração de Variáveis */
-    String dataCriacao;
+    Date dataCriacao;
     String tipoVaga;
     String descricaoVaga;
     String localVaga;
