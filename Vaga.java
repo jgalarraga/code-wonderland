@@ -13,6 +13,13 @@
 package simuladorsms;
 
 /**
+ * @função gravação da data automaticamente ao inserir vaga 
+ * @data 16/05/2016
+ * @autor Emer Martins
+ */ 
+import java.util.Date;
+
+/**
  * @função armazenar as características que todas as vagas irão conter
  * @data 28/04/2016
  * @author João Lucas & Juliana Galarraga
