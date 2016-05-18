@@ -1,6 +1,6 @@
 /**
  * @ProjetoIntegrador (P.I.): Simulador de SMS
- * @Versão 1.0
+ * @Versão 1.7
  * @Orientador: Alessandra
  * @Instituição: Centro Universitário Senac
  * @Curso: Tecnologia em Banco de Dados (1º Semestre)
@@ -17,15 +17,30 @@ import java.util.Scanner;
  * A diarista só poderá selecionar uma vaga e, quando a vaga estiver
  * selecionada, não poderá ficar mais visível no relatório.
  * @data 15.04.2016
- * @autores João Lucas & Juliana Galarraga
+ * @autores João Lucas, Emerson & Juliana Galarraga
  */
-
 public class SimuladorSMS {
 
+    public static Scanner teclado = new Scanner(System.in);
+
+    public static Vaga[] vaga = new Vaga[100]; // tornando publico o vetor de tipos VAGAS
+
+    // tornarei pública as variáveis transitórias do MenuEmpregador - > Adicionar vagas
+    public static String local = "";
+    public static String tipo = "";
+    public static String data = "";
+    public static String remuneracao = "";
+    public static String detalhes = "";
+
+    public static int contVagas; // contador que irá imcrementando a posição do vetor para ser add a vaga
+    public static int numAlteracao; // guarda o número da vaga a ser alterada
+    public static int numOferta; // guarda o número da oferta selecionada
+    public static int opcaoMenuServidor;
+            
+            
     public static void main(String[] args) {
         /* Declaração de Variáveis */
-        Scanner teclado = new Scanner(System.in);
-        int opcaoMenu, numOferta, opcaoMenuEmpregador, opcaoMenuServidor;
+        int opcaoMenu, opcaoMenuEmpregador;
         String login, senha, tipoLogin;
         boolean opcaoValida, voltar;
         // objeto do tipo MenuEmpregador para poder acessar todos os métodos
@@ -34,13 +49,11 @@ public class SimuladorSMS {
         // objeto do tipo MenuServidor para poder acessar todos os métodos
         // da classe MenuServidor, ou seja, ter acesso aos menús de servidor
         MenuServidor menuServidor = new MenuServidor();
-        // objeto do tipo Vagas para poder acessar todos os métodos
-        // da classe Vagas, ou seja, ter acesso à todas as vagas
-        Vagas vagas = new Vagas();
-        String[] primeiraVaga, segundaVaga, terceiraVaga;
 
 
         /* Inicialização de Variáveis */
+        contVagas = 0;
+        numAlteracao = 0;
         // variáveis para os menus
         numOferta = 0;
         opcaoMenuEmpregador = 0;
@@ -51,16 +64,6 @@ public class SimuladorSMS {
         login = "";
         senha = "";
         tipoLogin = "";
-        // variáveis que recebem as vagas
-        // esses três vetores recebem as variáveis primeiraVaga, segundaVaga e terceiraVaga da classe "Vagas" (também vetores de string)
-        primeiraVaga = vagas.primeiraVaga;
-        segundaVaga = vagas.segundaVaga;
-        terceiraVaga = vagas.terceiraVaga;
-
-        // Teste
-        System.out.println(primeiraVaga[0]); // data
-        System.out.println(primeiraVaga[1]); // nome da empresa contratante
-        System.out.println(primeiraVaga[2]); // tipo de vaga
 
         /* Login */
         do {
@@ -93,12 +96,13 @@ public class SimuladorSMS {
         if (opcaoMenu == 1) {
             tipoLogin = "servidor";
             do {
-                System.out.println("\033[31m" + "-------------------------");
-                System.out.println("Informe o login e senha: ");
-                System.out.println("\033[31m" + "-------------------------");
+                System.out.println("\033[31m" + "--------------------------------");
+                System.out.println("    Informe o login e senha: ");
+                System.out.println("\033[31m" + "--------------------------------");
                 System.out.print("\033[30m" + "‣ login servidor: ");
                 login = teclado.next();
                 System.out.print("‣ senha: ");
+                // Exibir asteriscos no lugar da senha?
                 senha = teclado.next();
                 System.out.println("");
 
@@ -113,9 +117,9 @@ public class SimuladorSMS {
         } else {
             tipoLogin = "empregador";
             do {
-                System.out.println("\033[34m" + "-------------------------");
-                System.out.println("Informe o login e senha: ");
-                System.out.println("\033[34m" + "-------------------------");
+                System.out.println("\033[34m" + "--------------------------------");
+                System.out.println("    Informe o login e senha: ");
+                System.out.println("\033[34m" + "--------------------------------");
                 System.out.print("\033[30m" + "‣ login empregador: ");
                 login = teclado.next();
                 System.out.print("‣ senha: ");
@@ -157,9 +161,10 @@ public class SimuladorSMS {
                     case 1:
                         do {
                             // RELATÓRIO DE VAGAS 
+                            menuEmpregador.exibirRelatorioVagas();
 
                             // Menu para a oferta selecionada
-                            menuServidor.exibirMenuVaga();
+                            menuServidor.exibirMenuVagas();
 
                             System.out.println("");
                             System.out.print("\033[30m" + "Selecione uma opção(1-3): ");
@@ -173,8 +178,17 @@ public class SimuladorSMS {
                                 opcaoValida = true;
                                 voltar = false;
                             }
+                            // Caso o usuário deseje selecionar uma das vagas
+                            if (opcaoMenuServidor == 1) {
+                                menuServidor.selecionarOferta();
+                                // Como a vaga foi selecionada, não estará mais disponível
+                                vaga[numOferta].disponibilidade = false;
+                            }
                             // Caso usuário solicite ver detalhes da vaga
                             if (opcaoMenuServidor == 2) {
+                                // usuário escolhe uma vaga para visualizar seus detalhes
+                                menuServidor.selecionarOferta();
+   
                                 menuServidor.exibirDetalhesVaga();
 
                                 System.out.println("");
@@ -206,31 +220,33 @@ public class SimuladorSMS {
                             opcaoMenuEmpregador = teclado.nextInt();
                             System.out.println("");
 
-                            if (opcaoMenuEmpregador > 3 || opcaoMenuEmpregador < 1) {
+                            if (opcaoMenuServidor > 3 || opcaoMenuServidor < 1) {
                                 System.out.println(">> Opção Inválida! :( <<");
                                 System.out.println("");
                             } else {
                                 opcaoValida = true;
+                                if (opcaoMenuServidor == 1) {
+                                    menuServidor.desistirVaga();
+                                }
                             }
                             // caso usuário queira ver detalhes da sua vaga
-                            if (opcaoMenuEmpregador == 1) {
-                                menuServidor.exibirDetalhesMinhaVaga();
-
-                                System.out.println("");
-                                System.out.print("\033[30m" + "Selecione uma opção(1-2): ");
-                                opcaoMenuServidor = teclado.nextInt();
-                                System.out.println("");
-
-                                if (opcaoMenuServidor > 2 || opcaoMenuServidor < 1) {
+                            if (opcaoMenuServidor > 2 || opcaoMenuServidor < 1) {
                                     System.out.println(">> Opção Inválida! :( <<");
                                     System.out.println("");
-                                } else {
+                            } else {
                                     opcaoValida = true;
                                     voltar = false;
-                                }
-
+                                        if (opcaoMenuServidor == 1) {
+                                            menuServidor.exibirDetalhesMinhaVaga();
+                                            System.out.println("");
+                                            System.out.print("\033[30m" + "Selecione uma opção(1-2): ");
+                                            opcaoMenuServidor = teclado.nextInt();
+                                            System.out.println("");
+                                        } else if (opcaoMenuServidor == 2) {
+                                            menuServidor.desistirVaga();
+                                            vaga[numOferta].disponibilidade = true;  
+                                        }
                             }
-
                         } while (!opcaoValida);
                         break;
                     // FIM DO CASO 2 - MEUS SERVIÇOS
@@ -241,6 +257,7 @@ public class SimuladorSMS {
             } while (!voltar);
 
         } else {
+            // EMPREGADOR
             opcaoValida = false;
             voltar = false;
             do {
@@ -280,6 +297,11 @@ public class SimuladorSMS {
                                 System.out.println(">> Opção Inválida! :( <<");
                                 System.out.println("");
                             }
+                            if (opcaoMenuEmpregador == 1) { // se desejar adicionar a vaga, jogaremos as variáveis no vetor 'vaga'
+                                menuEmpregador.criarVaga();
+                            } 
+                            
+                            
                         } while (!opcaoValida);
                         // FIM DA OPÇÃO DE ADICIONAR UMA VAGA
                         break;
@@ -295,6 +317,13 @@ public class SimuladorSMS {
                             System.out.println("");
                             if (opcaoMenuEmpregador == 1 || opcaoMenu == 2) {
                                 opcaoValida = true;
+                                // se a opção for 1, quer dizer que o usuário deseja alterar uma vaga
+                                if (opcaoMenuEmpregador == 1) {
+                                    System.out.print("Qual é a vaga que deseja alterar? > ");
+                                    numAlteracao = teclado.nextInt();
+                                    System.out.print(" <");
+                                    System.out.println("");
+                                }
                             } else {
                                 System.out.println(">> Opção Inválida! :( <<");
                             }
@@ -312,6 +341,15 @@ public class SimuladorSMS {
                                 System.out.println("");
                                 if (opcaoMenuEmpregador == 1 || opcaoMenu == 2) {
                                     opcaoValida = true;
+                                    if (opcaoMenuEmpregador == 1) {
+                                        System.out.println("\033[34m" + "Vaga alterada com sucesso! :)");
+                                        System.out.println("");
+                                        vaga[numAlteracao].descricaoVaga = detalhes;
+                                        vaga[numAlteracao].localVaga = local;
+                                        vaga[numAlteracao].periodoVaga = data;
+                                        vaga[numAlteracao].tipoVaga = tipo;
+                                        vaga[numAlteracao].remuneracao = remuneracao;
+                                    }
                                 } else {
                                     System.out.println(">> Opção Inválida! :( <<");
                                 }
