@@ -12,7 +12,13 @@ import static simuladorsms.SimuladorSMS.tipo;
 import static simuladorsms.SimuladorSMS.data;
 import static simuladorsms.SimuladorSMS.remuneracao;
 import static simuladorsms.SimuladorSMS.detalhes;
-import java.util.Date;
+import static simuladorsms.SimuladorSMS.login;
+import static simuladorsms.SimuladorSMS.menuGeral;
+import static simuladorsms.SimuladorSMS.opcaoMenuEmpregador;
+import static simuladorsms.SimuladorSMS.opcaoValida;
+import static simuladorsms.SimuladorSMS.senha;
+import static simuladorsms.SimuladorSMS.teclado;
+import static simuladorsms.SimuladorSMS.tipoLogin;
 
 /**
  * @função deixar o código principal mais limpo ao retirar todos os menus
@@ -21,6 +27,45 @@ import java.util.Date;
  * @autores João Lucas, Emerson e Juliana Galarraga
  */
 public class MenuEmpregador {
+
+    public void efetuarLoginEmpregador() {
+        System.out.println("\033[34m" + "--------------------------------");
+        System.out.println("    Informe o login e senha: ");
+        System.out.println("\033[34m" + "--------------------------------");
+        System.out.print("\033[30m" + "‣ login empregador: ");
+        login = teclado.next();
+        System.out.print("‣ senha: ");
+        senha = teclado.next();
+        System.out.println("");
+
+        validarLoginEmpregador();
+    }
+
+    public void validarLoginEmpregador() {
+        if (login.equals(tipoLogin) && senha.equals(tipoLogin)) {
+            opcaoValida = true;
+        } else {
+            System.out.println("login/senha inválido(a)! :( ");
+            System.out.println("");
+        }
+    }
+
+    public void selecionarOpcaoEmpregador(int n1, int n2) {
+        System.out.println("");
+        System.out.print("\033[30m" + "Selecione uma opção(" + n1 + "-" + n2 + "): ");
+        opcaoMenuEmpregador = teclado.nextInt();
+        System.out.println("");
+    }
+
+    public void validarOpcaoEmpregador(int n1, int n2) {
+        if (opcaoMenuEmpregador < n1 || opcaoMenuEmpregador > n2) {
+            opcaoValida = false;
+            System.out.println(">> Opção Inválida! :( <<");
+            System.out.println("");
+        } else {
+            opcaoValida = true;
+        }
+    }
 
     /**
      * método para exibir o menu principal do empregador
@@ -31,7 +76,9 @@ public class MenuEmpregador {
         System.out.println("\033[34m" + "══════════════════════════════");
         System.out.println("| (1) Adicionar oferta                          ");
         System.out.println("| (2) Alterar oferta                            ");
-        System.out.println("| (3) Sair                                      ");
+        System.out.println("| (3) Excluir oferta                            ");
+        System.out.println("| (4) Logoff                                    ");
+        System.out.println("| (5) Sair                                      ");
         System.out.println("\033[34m" + "══════════════════════════════");
     }
 
@@ -77,33 +124,60 @@ public class MenuEmpregador {
     }
 
     /**
-     * Método que exibe o relatório de vagas
-     */
-    public void exibirRelatorioVagas() {
-        for (int i = 0; i < contVagas; i++) {
-            if (vaga[i].disponibilidade == true) { // só vão ser mostrada as vagas que estão disponíveis
-                System.out.print(vaga[i].numero + " - ");
-                System.out.println(vaga[i].tipoVaga);
-                System.out.println("> Data de Criação: " + vaga[i].dataCriacao);
-                System.out.println("> Local: " + vaga[i].localVaga);
-                System.out.println("> Remuneração: R$" + vaga[i].remuneracao);
-                System.out.println("> Detalhes: " + vaga[i].descricaoVaga);
-                System.out.println("\033[34m" + "══════════════════════════════");
-            }
-        }
-    }
-
-    /**
      * Método que exibe as vagas que podem ser alteradas
      */
     public void alterarVaga() {
         System.out.println("\033[34m" + "══════════════════════════════");
         System.out.println("|               ALTERAR VAGA                  |");
         System.out.println("\033[34m" + "══════════════════════════════");
-        exibirRelatorioVagas();
+        menuGeral.exibirRelatorioVagas();
         System.out.println("| (1) Selecionar vaga para alteração            ");
         System.out.println("| (2) Voltar                                    ");
         System.out.println("\033[34m" + "══════════════════════════════");
+    }
+
+    public void selecionarVagaAlteracao() {
+        System.out.print(">> Qual é a vaga que deseja alterar? ");
+        numAlteracao = teclado.nextInt();
+        System.out.println("");
+    }
+
+    public void excluirVagaMenu() {
+        System.out.println("\033[34m" + "══════════════════════════════");
+        System.out.println("|               EXCLUIR VAGA                    |");
+        System.out.println("\033[34m" + "══════════════════════════════");
+        menuGeral.exibirRelatorioVagas();
+        System.out.println("| (1) Selecionar vaga para exclusão            ");
+        System.out.println("| (2) Voltar                                    ");
+        System.out.println("\033[34m" + "══════════════════════════════");
+    }
+
+    public void selecionarVagaExclusao() {
+        System.out.print("> Qual vaga deseja excluir? ");
+        numOferta = teclado.nextInt();
+        System.out.println("");
+    }
+
+    public void excluirVaga() {
+
+        selecionarVagaExclusao();
+
+        Vaga[] vetorAux = new Vaga[vaga.length];
+        int cont = 0;
+        for (int i = 0; i < vaga.length; i++) {
+            // se avaga não for igual o número vaga que quero excluir
+            if (i != numOferta) {
+                // o vetor aux vai receber a vaga
+                vetorAux[cont] = vaga[i];
+                cont++;
+            }
+        }
+        // o vetor vaga agora é o vetorAux
+        vaga = vetorAux;
+
+        System.out.println("");
+        System.out.println("\033[34m" + "Vaga " + numOferta + " excluída! :(");
+        System.out.println("");
     }
 
     /**

@@ -19,18 +19,58 @@ import static simuladorsms.SimuladorSMS.tipo;
 import static simuladorsms.SimuladorSMS.data;
 import static simuladorsms.SimuladorSMS.remuneracao;
 import static simuladorsms.SimuladorSMS.detalhes;
+import static simuladorsms.SimuladorSMS.login;
+import static simuladorsms.SimuladorSMS.menuGeral;
 import static simuladorsms.SimuladorSMS.numOferta;
+import static simuladorsms.SimuladorSMS.opcaoMenu;
+import static simuladorsms.SimuladorSMS.opcaoValida;
+import static simuladorsms.SimuladorSMS.senha;
 import static simuladorsms.SimuladorSMS.teclado;
+import static simuladorsms.SimuladorSMS.tipoLogin;
 import static simuladorsms.SimuladorSMS.vaga;
 
 public class MenuServidor {
 
     /* Declaração de Variáveis */
-    MenuEmpregador menuEmpregador = new MenuEmpregador();
-    Scanner teclado = new Scanner(System.in);
+    public void efetuarLoginServidor() {
+        System.out.println("\033[31m" + "--------------------------------");
+        System.out.println("    Informe o login e senha: ");
+        System.out.println("\033[31m" + "--------------------------------");
+        System.out.print("\033[30m" + "‣ login servidor: ");
+        login = teclado.next();
+        System.out.print("‣ senha: ");
+        // Exibir asteriscos no lugar da senha?
+        senha = teclado.next();
+        System.out.println("");
 
-    public void LoginServidor() {
+        validarLoginServidor();
+    }
 
+    public void validarLoginServidor() {
+        if (login.equals(tipoLogin) && senha.equals(tipoLogin)) {
+            opcaoValida = true;
+        } else {
+            System.out.println("login/senha inválido(a)! :( ");
+            System.out.println("");
+        }
+    }
+
+    public void validarOpcaoServidor(int n1, int n2) {
+        if (opcaoMenuServidor < n1 || opcaoMenuServidor > n2) {
+            opcaoValida = false;
+            System.out.println(">> Opção Inválida! :( <<");
+            System.out.println("");
+
+        } else {
+            opcaoValida = true;
+        }
+    }
+
+    public void selecionarOpcaoServidor(int n1, int n2) {
+        System.out.println("");
+        System.out.print("\033[30m" + "Selecione uma opção(" + n1 + "-" + n2 + "): ");
+        opcaoMenuServidor = teclado.nextInt();
+        System.out.println("");
     }
 
     /**
@@ -41,8 +81,9 @@ public class MenuServidor {
         System.out.println("|               OPÇAO SERVIDOR                  ");
         System.out.println("\033[31m" + "══════════════════════════════");
         System.out.println("|(1) Oferta de vagas                            ");
-        System.out.println("|(2) Meus Serviços                              ");
-        System.out.println("|(3) Sair                                       ");
+        System.out.println("|(2) Meus Serviço                               ");
+        System.out.println("|(3) Logoff                                     ");
+        System.out.println("|(4) Encerrar programa                          ");
         System.out.println("\033[31m" + "══════════════════════════════");
 
     }
@@ -54,11 +95,11 @@ public class MenuServidor {
         System.out.println("\033[31m" + "═══════════════════════════════"); // \033[35m - muda a cor do char para roxo
         System.out.println("|                   MENU VAGA                   |");
         System.out.println("\033[31m" + "═══════════════════════════════");
-        menuEmpregador.exibirRelatorioVagas();
+        menuGeral.exibirRelatorioVagas();
         System.out.println("|Opções:                                        |");
         System.out.println("|      (1) Selecionar uma vaga                  |");
         System.out.println("|      (2) Ver detalhes de uma vaga             |");
-        System.out.println("|      (3) Sair                                 |");
+        System.out.println("|      (3) Voltar                               |");
         System.out.println("\033[31m" + "═══════════════════════════════");
 
     }
@@ -142,11 +183,11 @@ public class MenuServidor {
     }
 
     public void selecionarOferta() {
-        System.out.print("Qual vaga deseja selecionar? > ");
+        System.out.print("> Qual vaga deseja selecionar? ");
         numOferta = teclado.nextInt();
-        System.out.print(" <");
         System.out.println("");
-        System.out.println("\033[30m" + "Vaga " + numOferta + " selecionada! :)");
+        System.out.println("\033[31m" + "Vaga " + numOferta + " selecionada! :)");
+        System.out.println("");
     }
 
 }

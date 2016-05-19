@@ -12,8 +12,6 @@
 
 package simuladorsms;
 
-import java.util.Date;
-
 /**
  * @função armazenar as características que todas as vagas irão conter
  * @data 28/04/2016
@@ -21,7 +19,7 @@ import java.util.Date;
  */
 public class Vaga {
     /* Declaração de Variáveis */
-    Date dataCriacao;
+    String dataCriacao;
     String tipoVaga;
     String descricaoVaga;
     String localVaga;
