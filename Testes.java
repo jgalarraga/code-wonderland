@@ -3,53 +3,58 @@
  */
 package simuladorsms;
 
+import java.util.Scanner;
+
 /**
  *
- * @author User
+ * @autores 
  */
+
 public class Testes {
 
     public static void main(String[] args) {
         /* Declaração de Variáveis */
         // Meu vetor vaga tem capacidade para receber duas vagas
-        Vaga[] vaga = new Vaga[2];
-        
+        Vaga[] vaga = new Vaga[5];
+        Scanner in = new Scanner(System.in);
+        boolean voltar = false;
+        int resposta = 0;
+        int i = 0;
+
         /* Inicialização do Vetor */
-        for (int i = 0; i < vaga.length; i++){
+        do {
             vaga[i] = new Vaga();
-        }
-        
-        // Adicionando as informações às vagas
-        // Vaga 1
-        vaga[0].dataCriacao = "05/03/2016";
-        vaga[0].tipoVaga = "Empregada Doméstica";
-        vaga[0].descricaoVaga = "BUSCAMOS DIARISTAS COM EXPERIÊNCIA COMPROVADA, PARA TRABALHAR EM RESIDÊNCIAS,COMÉRCIOS E EMPRESAS.";
-        vaga[0].periodoVaga = "Jornada Período Integral.DIAS E HORARIOS VARIADOS DE ACORDO COM SUA DISPONIBILIDADE";
-        vaga[0].localVaga = "São Paulo, Sp";
-        vaga[0].remuneracao = "A Combinar";
-        
-        // Vaga 2
-        vaga[1].dataCriacao = "05/03/2016";
-        vaga[1].tipoVaga = "faxineira";
-        vaga[1].descricaoVaga = ".";
-        vaga[1].periodoVaga = ".";
-        vaga[1].localVaga = ".";
-        vaga[1].remuneracao = ".";
-        
-        // Vaga 3
-        
-        
+            vaga[i].dataCriacao = in.nextLine();
+            vaga[i].tipoVaga = in.nextLine();
+            vaga[i].descricaoVaga = in.nextLine();
+            vaga[i].periodoVaga = in.nextLine();
+            vaga[i].localVaga = in.nextLine();
+            vaga[i].remuneracao = in.nextLine();
+            vaga[i].disponibilidade = false;
+            i += +1;
+            System.out.println("Deseja continuar ?");
+            resposta = in.nextInt();
+            
+            if (resposta != 1) {
+                voltar = true;
+            }
+
+        } while (!voltar);
+
         /* Saída */
         // imprimindo a lista de vagas
-        for (int j = 0; j < vaga.length; j++){
-            System.out.println("----------------");
-            System.out.println(vaga[j].dataCriacao);
-            System.out.println(vaga[j].tipoVaga);
-            System.out.println(vaga[j].descricaoVaga);
-            System.out.println(vaga[j].periodoVaga);
-            System.out.println(vaga[j].localVaga);
-            System.out.println(vaga[j].remuneracao);
+        for (int j = 0; j < i; j++) {
+            if (vaga[j].disponibilidade == false) {
+                System.out.println("----------------");
+                System.out.println(vaga[j].dataCriacao);
+                System.out.println(vaga[j].tipoVaga);
+                System.out.println(vaga[j].descricaoVaga);
+                System.out.println(vaga[j].periodoVaga);
+                System.out.println(vaga[j].localVaga);
+                System.out.println(vaga[j].remuneracao);
+            }
         }
+
     }
 
 }
